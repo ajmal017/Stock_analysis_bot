@@ -2,6 +2,6 @@
 __pycache__/
 __pycache__
 Secrets.py
-*.suo
-*.sqlite
 *.gitignore
+/.vs
+
