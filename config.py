@@ -1,6 +1,6 @@
 #Set these params to true when running bot. False For Testing
-RUN_BOT = False
-SEND_EMAIL = True
+RUN_BOT = True
+SEND_EMAIL = False
 UPDATE_STOCK_LIST=False
 
 send_to='email@gmail.com'

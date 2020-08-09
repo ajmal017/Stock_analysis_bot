@@ -3,7 +3,7 @@ import config
 class RSI_Calc:
     
     
-    def __init__(self, update=True):
+    def __init__(self):
         pass
 
 
@@ -53,6 +53,21 @@ class RSI_Calc:
             plt.axhline(70, linestyle='--')
             plt.axhline(80, linestyle='--', alpha=0.5)
             plt.axhline(100, linestyle='--', alpha=0.1)
+            plt.savefig(config.GRAPH_FILE_NAME)
+            
+            
+        except Exception as e:
+            print(e)
+
+
+
+    def Price_Graph(df):
+        try:
+                      # plot price
+            plt.figure(figsize=(15,5))
+            plt.plot(df['Date'], df['Adj Close'])
+            plt.title('Price chart (Adj Close)')
+            plt.show()
             plt.savefig(config.GRAPH_FILE_NAME)
             
             
