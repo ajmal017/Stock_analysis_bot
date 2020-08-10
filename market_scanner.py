@@ -104,9 +104,12 @@ class mainObj:
         if d.empty:
             return
         df = self.getRSI(Stock_data)
+        df = EMA_Calc.computeSMA(df, 5)
+        df = EMA_Calc.computeEMA(df, 5)
         RSI = df.iloc[-1]["RSI"]
         print("\n"+ str(df.iloc[-1]["RSI"]))
         RSI_Calc.RSI_Graph(df)
+
         self.customPrint(d, x, RSI)
         if(config.SEND_EMAIL):
             EmailResults.SendResults(x, d, RSI, config.send_to)
