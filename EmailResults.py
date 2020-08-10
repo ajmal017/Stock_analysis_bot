@@ -52,7 +52,7 @@ class EmailResults:
             print('Something went wrong...')
 
             
-    def SendMessage(body, subject):
+    def SendMessage(body, subject, send_to):
    
         # Create message container - the correct MIME type is multipart/alternative.
         msg = MIMEMultipart('alternative')
@@ -68,7 +68,7 @@ class EmailResults:
 
             server.ehlo()
             server.login(Secrets.gmail_user, Secrets.gmail_password)
-            server.sendmail(Secrets.gmail_user, config.send_to, msg.as_string(), "HTML")
+            server.sendmail(Secrets.gmail_user, send_to, msg.as_string(), "HTML")
             server.close()
             print("Sent")
         except Exception as e:
