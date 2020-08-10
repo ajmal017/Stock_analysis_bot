@@ -104,8 +104,11 @@ class mainObj:
         if d.empty:
             return
         df = self.getRSI(Stock_data)
-        df = EMA_Calc.computeSMA(df, 5)
-        df = EMA_Calc.computeEMA(df, 5)
+        df = EMA_Calc.computeSMA(df, "fast_SMA", config.fast_sma_days)
+        df = EMA_Calc.computeSMA(df, "slow_SMA", config.slow_sma_days)
+        df = EMA_Calc.computeEMA(df, "fast_EMA", config.fast_ema_days)
+        df = EMA_Calc.computeEMA(df, "slow_EMA", config.slow_ema_days)
+        print(df)
         RSI = df.iloc[-1]["RSI"]
         print("\n"+ str(df.iloc[-1]["RSI"]))
         RSI_Calc.RSI_Graph(df)

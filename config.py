@@ -1,9 +1,10 @@
 #Set these params to true when running bot. False For Testing
 RUN_BOT = True
-SEND_EMAIL = False
+SEND_EMAIL = True
 UPDATE_STOCK_LIST=False
 
 send_to='email@gmail.com'
+send_to_log_email = 'logEmail@gmail.com'
 
 #Standard Deviation Cutoff Periods
 MONTH_CUTTOFF = 5 #Amount of months of data to analyze
@@ -19,7 +20,18 @@ NASDAQ_LISTED_PATH="data/nasdaqlisted.txt"
 EXCLUDED_STOCK_PATH="data/excluded.txt"
 
 
+#SMA
+fast_sma_days = 5
+slow_sma_days = 10
 
+
+#EMA
+fast_ema_days = 5 
+slow_ema_days = 10
+
+
+
+#Emoji Codes
 FIRE = u"\U0001F525"
 ICE = u"\U0001F9CA"
 NEUTRAL_FACE=u"\U0001F610"
