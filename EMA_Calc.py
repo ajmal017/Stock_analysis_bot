@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import config
 import pandas as pd
-from market_scanner import mainObj
+
 class EMA_Calc:
     
     def __init__(self):

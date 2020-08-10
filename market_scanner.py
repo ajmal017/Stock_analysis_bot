@@ -126,7 +126,8 @@ class mainObj:
             date.today().strftime("%Y-%m-%d"), "%Y-%m-%d")
         start_time = time.time()
         if(config.SEND_EMAIL):
-            EmailResults.SendMessage("Bot started working", "BOT LOG")
+            #EmailResults.SendMessage("Bot started working", "BOT LOG")
+            pass
             
         else:
             print("Bot started working")   
@@ -141,6 +142,7 @@ class mainObj:
                            for x in tqdm(list_of_tickers, miniters=1))
         else:
             #This is to debug main process with just one stock
+            print(f)
             self.parallel_wrapper("TSLA", currentDate, positive_scans)
 
         body = "---This bot took " + str((time.time() - start_time)/60) + " Minutes to run.---"
@@ -159,7 +161,8 @@ if __name__ == '__main__':
         
     except Exception as e:
         if(config.SEND_EMAIL):
-            EmailResults.SendMessage(e, "BOT LOG")
+            err_msg = str(e)
+            EmailResults.SendMessage(err_msg, "BOT LOG")
         else:
             print(e)
     

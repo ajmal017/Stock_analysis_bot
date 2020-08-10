@@ -68,7 +68,7 @@ class EmailResults:
 
             server.ehlo()
             server.login(Secrets.gmail_user, Secrets.gmail_password)
-            server.sendmail(sent_from, to, msg.as_string(), "HTML")
+            server.sendmail(Secrets.gmail_user, config.send_to, msg.as_string(), "HTML")
             server.close()
             print("Sent")
         except Exception as e:
