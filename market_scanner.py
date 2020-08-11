@@ -21,6 +21,7 @@ import config
 import sys
 from RSI_Calc import *
 from EMA_Calc import *
+import csv
 # insert at 1, 0 is the script path (or '' in REPL)
 sys.path.insert(1, '/home/pi/Documents/Stock_analyzer_bot')
 
@@ -97,6 +98,35 @@ class mainObj:
         print("\n"+ str(df.iloc[-1]["RSI"]))
         return df
 
+    def checkForEntryPoint(self, data):
+        rowCount = len(data.index)
+        fast_ema=data.iloc[-1]["fast_EMA"]
+        slow_ema=data.iloc[-1]["slow_EMA"]
+        RSI=data.iloc[-1]["RSI"]
+        prev_RSI = data.iloc[-2]["RSI"]
+        prev_fast_ema=data.iloc[-2]["fast_EMA"]
+        prev_slow_ema=data.iloc[-2]["slow_EMA"]
+        if(prev_fast_ema < prev_slow_ema and fast_ema > slow_ema and RSI > 60 ):
+            print("BUY")
+            return True
+        elif(prev_fast_ema > prev_slow_ema and fast_ema < slow_ema and RSI < 40):
+            print("SELL")
+            return False
+
+        
+    def writeToCsv(self, data,):
+        fields=['Date','stock' 'Adj Close']
+        fileName='botAnalysisHistory'+ date.today() + '.csv'
+        try:
+            with open(csv_file, 'w') as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
+                writer.writeheader()
+                for data in dict_data:
+                    writer.writerow(data)
+        except IOError:
+            print("I/O error")
+
+
     def parallel_wrapper(self,x, currentDate, positive_scans):
         Stock_data = self.getStockData(x)
         d = (self.find_anomalies(Stock_data[["Volume"]], currentDate))
@@ -108,6 +138,7 @@ class mainObj:
         df = EMA_Calc.computeSMA(df, "slow_SMA", config.slow_sma_days)
         df = EMA_Calc.computeEMA(df, "fast_EMA", config.fast_ema_days)
         df = EMA_Calc.computeEMA(df, "slow_EMA", config.slow_ema_days)
+        checkForEntryPoint(df)
         print(df)
         RSI = df.iloc[-1]["RSI"]
         print("\n"+ str(df.iloc[-1]["RSI"]))
@@ -119,10 +150,12 @@ class mainObj:
         #Allows you to keep all data for the end of the Bots run. Not doing anything with it yet
         stonk = dict()
         stonk['Ticker'] = x
-        stonk['TargetDate'] = d['Date'].iloc[0]
-        stonk['TargetVolume'] = d['Volume'].iloc[0]
+        stonk['TargetDate'] = df['Date'].iloc[-1]
+        stonk['TargetVolume'] = df['Volume'].iloc[-1]
         stonk['RSI'] = RSI
+        stonk['Adj Close'] = df['Adj Close'].iloc[-1]
         positive_scans.append(stonk)
+
         
     def main_func(self):
         positive_scans=True
@@ -148,7 +181,14 @@ class mainObj:
                            for x in tqdm(list_of_tickers, miniters=1))
         else:
             #This is to debug main process with just one stock
-            self.parallel_wrapper("TSLA", currentDate, positive_scans)
+            #self.parallel_wrapper("TSLA", currentDate, positive_scans)
+            Stock_data = self.getStockData("IDEX")
+            df = self.getRSI(Stock_data)
+            df = EMA_Calc.computeSMA(df, "fast_SMA", config.fast_sma_days)
+            df = EMA_Calc.computeSMA(df, "slow_SMA", config.slow_sma_days)
+            df = EMA_Calc.computeEMA(df, "fast_EMA", config.fast_ema_days)
+            df = EMA_Calc.computeEMA(df, "slow_EMA", config.slow_ema_days)
+            self.checkForEntryPoint(df)
 
         body = "---This bot took " + str((time.time() - start_time)/60) + " Minutes to run.---"
         
@@ -157,6 +197,7 @@ class mainObj:
         else:
             print(body)
 
+        self.writeToCsv(positive_scans)
         return positive_scans
 
 
