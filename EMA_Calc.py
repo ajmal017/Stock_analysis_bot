@@ -23,7 +23,3 @@ class EMA_Calc:
         return data
 
 
-
-csv_date= datetime.strptime('2020-08-11 00:00:00','%Y-%m-%d %H:%M:%S')
-testing_days_ago = ((datetime.now() - csv_date) <= timedelta(days=config.DAY_CUTTOFF))
-print(testing_days_ago)
