@@ -22,11 +22,9 @@ import sys
 from RSI_Calc import *
 from EMA_Calc import *
 from testing import *
-
 from csv import writer 
 from decimal import Decimal
 import os.path
-
 from dataCollector import DataCollector
 # insert at 1, 0 is the script path (or '' in REPL)
 #FOR LINUX
@@ -64,7 +62,7 @@ class mainObj:
         data_mean = np.mean(data['Volume'])
         anomaly_cut_off = data_std * config.STD_CUTTOFF
         upper_limit = data_mean + anomaly_cut_off
-        upper_limit=100
+        
         data.reset_index(level=0, inplace=True)
         is_outlier = data['Volume'] > upper_limit
         is_in_three_days = ((currentDate - data['Date']) <= datetime.timedelta(days=config.DAY_CUTTOFF))
@@ -73,7 +71,6 @@ class mainObj:
     def customPrint(self, d, tick, RSI):
         print("\n\n\n*******  " + tick.upper() + "  *******")
         print("Ticker: "+tick.upper())
-        print("Its a good buy!")
         print("RSI: "+str(RSI))
         print("*********************\n\n\n")
 
@@ -117,17 +114,18 @@ class mainObj:
         df = self.getRSI(Stock_data)
         if(not 'RSI' in df.columns):
             return
-        df = EMA_Calc.computeSMA(df, "fast_SMA", config.fast_sma_days)
-        df = EMA_Calc.computeSMA(df, "slow_SMA", config.slow_sma_days)
+
         df = EMA_Calc.computeEMA(df, "fast_EMA", config.fast_ema_days)
         df = EMA_Calc.computeEMA(df, "slow_EMA", config.slow_ema_days)
         entry_point = self.checkForEntryPoint(df)
+        
         if(not entry_point):
             return
         print(df)
         RSI = df.iloc[-1]["RSI"]
         print("\n"+ str(RSI))
-        RSI_Calc.RSI_Graph(df)
+        
+        RSI_Calc.Price_Graph(df)
         
         self.customPrint(df, x, RSI)
         if(config.SEND_EMAIL):
@@ -138,7 +136,7 @@ class mainObj:
         stonk['stock'] = x
         stonk['Adj Close'] = df['Adj Close'].iloc[-1]
         
-        append_list_as_row(stonk)
+        Testing.append_list_as_row(stonk)
         positive_scans.append(stonk)
 
         

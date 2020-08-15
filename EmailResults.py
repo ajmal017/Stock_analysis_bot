@@ -17,14 +17,14 @@ class EmailResults:
                 
     def SendResults(tic, d, RSI):
 
-        if(RSI > 70):
+        if(RSI > config.HIGH_RSI_POINT):
             emoji=config.fire
-        elif(RSI<30):
+        elif(RSI<config.LOW_RSI_POINT):
             emoji=config.ICE
         else:
             emoji=config.NEUTRAL_FACE
   
-        body = "*******\n %s \n*******\n %s \n\nRSI: %s %s \n robinhood.com/stocks/%s  \n*******" % (tic, "howdy", str(round(RSI,2)), emoji, tic )
+        body = "*******\n %s \n*******\n\nRSI: %s %s \n robinhood.com/stocks/%s  \n*******" % (tic, str(round(RSI,2)), emoji, tic )
 
         # Create message container - the correct MIME type is multipart/alternative.
         msg = MIMEMultipart()

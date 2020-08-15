@@ -35,14 +35,15 @@ class Testing:
 
                 if(len(row)>0 and i>=1):
                     csv_date= datetime.datetime.strptime(row[0],'%Y-%m-%d %H:%M:%S')
-                    check_date = csv_date + datetime.timedelta(days=1)
+                    #check_date = csv_date + timedelta(days=1)
                     in_date_range = ((datetime.datetime.today() - csv_date) <= timedelta(days=config.DAYS_OF_TEST))
-                    print(testing_days_ago)
+                    
                     
                     if(in_date_range):
                         data = DataCollector.getStockData(row[1])
-                        d = data.loc[check_date]
-                        print(d)
+                        print(data)
+                        loc = data.index.get_loc(csv_date)
+                        d = data.iloc[loc+1]
                         todays_price = float(d["Adj Close"])
                         stockCount+=1
                         yesterday_price= float(row[2])
@@ -75,8 +76,6 @@ class Testing:
 
     def append_list_as_row(data):
         fields=['date','stock', 'Adj Close', ]
-        print(type(data))
-        
         fileName=config.STOCK_RESULTS
         try:
             with open(fileName, 'a+', newline='') as csvfile:

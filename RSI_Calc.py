@@ -1,5 +1,9 @@
 import matplotlib.pyplot as plt
 import config
+import pandas as pd
+import matplotlib.dates as mpl_dates
+
+
 class RSI_Calc:
     
     
@@ -45,7 +49,6 @@ class RSI_Calc:
             fig = plt.figure(figsize=(15,5))
             fig.title('RSI chart')
             fig.plot(df['Date'], df['RSI'])
-
             fig.axhline(0, linestyle='--', alpha=0.1)
             fig.axhline(20, linestyle='--', alpha=0.5)
             fig.axhline(30, linestyle='--')
@@ -64,10 +67,13 @@ class RSI_Calc:
     def Price_Graph(df):
         try:
                       # plot price
+            df.index = pd.to_datetime(df.index)
             plt.figure(figsize=(15,5))
-            plt.plot(df['Date'], df['Adj Close'])
+            plt.plot(df['Date'], df['Adj Close'], color="black", label="Adj Close")
+            plt.plot(df['Date'], df['slow_EMA'], color="red", label="Slow EMA")
+            plt.plot(df['Date'], df['fast_EMA'], color="green", label="Fast EMA")
             plt.title('Price chart (Adj Close)')
-            plt.show()
+            plt.legend(loc="upper left")
             plt.savefig(config.GRAPH_FILE_NAME)
             
             
