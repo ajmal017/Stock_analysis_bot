@@ -14,7 +14,7 @@ class EmailResults:
     def __init__(self, update=True):
         pass
 
-
+                
     def SendResults(tic, d, RSI):
 
         if(RSI > 70):
@@ -24,7 +24,7 @@ class EmailResults:
         else:
             emoji=config.NEUTRAL_FACE
   
-        body = "*******\n %s \n*******\n %s \n\nRSI: %s %s \n robinhood.com/stocks/%s  \n*******" % (tic, d.to_string(index=False), str(round(RSI,2)), emoji, tic )
+        body = "*******\n %s \n*******\n %s \n\nRSI: %s %s \n robinhood.com/stocks/%s  \n*******" % (tic, "howdy", str(round(RSI,2)), emoji, tic )
 
         # Create message container - the correct MIME type is multipart/alternative.
         msg = MIMEMultipart()
@@ -45,11 +45,12 @@ class EmailResults:
 
             server.ehlo()
             server.login(Secrets.gmail_user, Secrets.gmail_password)
-            server.sendmail(sent_from, to, msg.as_string(), "HTML")
+            server.sendmail(Secrets.gmail_user, config.send_to, msg.as_string(), "HTML")
             server.close()
             print("Sent")
-        except:
-            print('Something went wrong...')
+        except Exception as e:
+            print(e)
+      
 
             
     def SendMessage(body, subject, send_to):
@@ -73,4 +74,4 @@ class EmailResults:
             print("Sent")
         except Exception as e:
             print(e)
-            
+         

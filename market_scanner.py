@@ -21,10 +21,16 @@ import config
 import sys
 from RSI_Calc import *
 from EMA_Calc import *
-import csv
-# insert at 1, 0 is the script path (or '' in REPL)
-sys.path.insert(1, '/home/pi/Documents/Stock_analyzer_bot')
+from testing import *
 
+from csv import writer 
+from decimal import Decimal
+import os.path
+
+from dataCollector import DataCollector
+# insert at 1, 0 is the script path (or '' in REPL)
+#FOR LINUX
+sys.path.insert(1, config.REPO_FOLDER_LOCATION)
 
 
 ###########################
@@ -36,27 +42,7 @@ class mainObj:
     def __init__(self):
         pass
 
-    def getStockData(self, ticker):
-        #global MONTH_CUTTOFF
-        currentDate = datetime.datetime.strptime(
-        date.today().strftime("%Y-%m-%d"), "%Y-%m-%d")
-        pastDate = currentDate - \
-            dateutil.relativedelta.relativedelta(months=config.MONTH_CUTTOFF)
-        sys.stdout = open(os.devnull, "w")
-        data = yf.download(ticker, pastDate, currentDate)
-        sys.stdout = sys.__stdout__
-        return data
 
-
-    def getData(self, ticker):
-        currentDate = datetime.datetime.strptime(
-            date.today().strftime("%Y-%m-%d"), "%Y-%m-%d")
-        pastDate = currentDate - \
-            dateutil.relativedelta.relativedelta(months=config.MONTH_CUTTOFF)
-        sys.stdout = open(os.devnull, "w")
-        data = yf.download(ticker, pastDate, currentDate)
-        sys.stdout = sys.__stdout__
-        return data[["Volume"]]
 
     def affordable(self, ticker):
         tick = yf.Ticker(ticker)
@@ -87,7 +73,7 @@ class mainObj:
     def customPrint(self, d, tick, RSI):
         print("\n\n\n*******  " + tick.upper() + "  *******")
         print("Ticker: "+tick.upper())
-        print(d.to_string(index=False))
+        print("Its a good buy!")
         print("RSI: "+str(RSI))
         print("*********************\n\n\n")
 
@@ -95,69 +81,69 @@ class mainObj:
         ticker_df = data.reset_index()
         df = ticker_df
         df['RSI'] = RSI_Calc.computeRSI(df['Adj Close'], config.DAYS_OF_RSI)
-        print("\n"+ str(df.iloc[-1]["RSI"]))
+        
+        #print("\n"+ str(df.iloc[-1]["RSI"]))
         return df
 
     def checkForEntryPoint(self, data):
         rowCount = len(data.index)
-        fast_ema=data.iloc[-1]["fast_EMA"]
-        slow_ema=data.iloc[-1]["slow_EMA"]
-        RSI=data.iloc[-1]["RSI"]
-        prev_RSI = data.iloc[-2]["RSI"]
-        prev_fast_ema=data.iloc[-2]["fast_EMA"]
-        prev_slow_ema=data.iloc[-2]["slow_EMA"]
-        if(prev_fast_ema < prev_slow_ema and fast_ema > slow_ema and RSI > 60 ):
-            print("BUY")
-            return True
-        elif(prev_fast_ema > prev_slow_ema and fast_ema < slow_ema and RSI < 40):
-            print("SELL")
-            return False
-
         
-    def writeToCsv(self, data,):
-        fields=['Date','stock' 'Adj Close']
-        fileName='botAnalysisHistory'+ date.today() + '.csv'
-        try:
-            with open(csv_file, 'w') as csvfile:
-                writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
-                writer.writeheader()
-                for data in dict_data:
-                    writer.writerow(data)
-        except IOError:
-            print("I/O error")
+        if(rowCount>3):
+            fast_ema=float(data.iloc[-1]["fast_EMA"])
+            slow_ema=float(data.iloc[-1]["slow_EMA"])
+            
+            RSI=float(data.iloc[-1]["RSI"])
+            prev_RSI = float(data.iloc[-2]["RSI"])
+            prev_fast_ema=float(data.iloc[-2]["fast_EMA"])
+            prev_slow_ema=float(data.iloc[-2]["slow_EMA"])
+            if(  prev_fast_ema < prev_slow_ema and fast_ema > slow_ema and RSI > float(config.HIGH_RSI_POINT) ):
+                print("BUY")
+                return True
+            elif(prev_fast_ema > prev_slow_ema and fast_ema < slow_ema and RSI < float(config.LOW_RSI_POINT)):
+                print("SELL")
+                return False
+            else:
+                print("Not the time")
+                return False
+        else:
+             return False
+        
+
 
 
     def parallel_wrapper(self,x, currentDate, positive_scans):
-        Stock_data = self.getStockData(x)
-        d = (self.find_anomalies(Stock_data[["Volume"]], currentDate))
-        config.DAYS_OF_RSI=14
-        if d.empty:
-            return
+        Stock_data = DataCollector.getStockData(x)
+        
         df = self.getRSI(Stock_data)
+        if(not 'RSI' in df.columns):
+            return
         df = EMA_Calc.computeSMA(df, "fast_SMA", config.fast_sma_days)
         df = EMA_Calc.computeSMA(df, "slow_SMA", config.slow_sma_days)
         df = EMA_Calc.computeEMA(df, "fast_EMA", config.fast_ema_days)
         df = EMA_Calc.computeEMA(df, "slow_EMA", config.slow_ema_days)
-        checkForEntryPoint(df)
+        entry_point = self.checkForEntryPoint(df)
+        if(not entry_point):
+            return
         print(df)
         RSI = df.iloc[-1]["RSI"]
-        print("\n"+ str(df.iloc[-1]["RSI"]))
+        print("\n"+ str(RSI))
         RSI_Calc.RSI_Graph(df)
-
-        self.customPrint(d, x, RSI)
+        
+        self.customPrint(df, x, RSI)
         if(config.SEND_EMAIL):
-            EmailResults.SendResults(x, d, RSI, config.send_to)
+            EmailResults.SendResults(x, config.send_to, RSI)
         #Allows you to keep all data for the end of the Bots run. Not doing anything with it yet
         stonk = dict()
-        stonk['Ticker'] = x
-        stonk['TargetDate'] = df['Date'].iloc[-1]
-        stonk['TargetVolume'] = df['Volume'].iloc[-1]
-        stonk['RSI'] = RSI
+        stonk['date'] = df.index[-1]
+        stonk['stock'] = x
         stonk['Adj Close'] = df['Adj Close'].iloc[-1]
+        
+        append_list_as_row(stonk)
         positive_scans.append(stonk)
 
         
     def main_func(self):
+
         positive_scans=True
         StocksController = NasdaqController(True)
         list_of_tickers = StocksController.getList()
@@ -166,8 +152,7 @@ class mainObj:
         start_time = time.time()
         if(config.SEND_EMAIL):
             EmailResults.SendMessage("Bot started working", "BOT LOG", config.send_to_log_email)
-            pass
-            
+            pass 
         else:
             print("Bot started working")   
 
@@ -181,30 +166,28 @@ class mainObj:
                            for x in tqdm(list_of_tickers, miniters=1))
         else:
             #This is to debug main process with just one stock
-            #self.parallel_wrapper("TSLA", currentDate, positive_scans)
-            Stock_data = self.getStockData("IDEX")
-            df = self.getRSI(Stock_data)
-            df = EMA_Calc.computeSMA(df, "fast_SMA", config.fast_sma_days)
-            df = EMA_Calc.computeSMA(df, "slow_SMA", config.slow_sma_days)
-            df = EMA_Calc.computeEMA(df, "fast_EMA", config.fast_ema_days)
-            df = EMA_Calc.computeEMA(df, "slow_EMA", config.slow_ema_days)
-            self.checkForEntryPoint(df)
-
-        body = "---This bot took " + str((time.time() - start_time)/60) + " Minutes to run.---"
+            self.parallel_wrapper("TSLA", currentDate, positive_scans)
+        
+        body=""
+        if(os.path.isfile(R'data\botAnalysisHistory.csv')):
+            yesterdays_score = Testing.backTestYesterdaysResults()
+            body = "Yesterdays score was a " + str(yesterdays_score) + "!"
+        body += "\n---This bot took " + str((time.time() - start_time)/60) + " Minutes to run.---"
         
         if(config.SEND_EMAIL):
             EmailResults.SendMessage(body, "BOT LOG", config.send_to_log_email)
         else:
             print(body)
-
-        self.writeToCsv(positive_scans)
+        print(len(positive_scans))
+        #self.writeToCsv(positive_scans)
         return positive_scans
 
 
 if __name__ == '__main__':
     try:
         mainObj().main_func()
-        
+
+
     except Exception as e:
         if(config.SEND_EMAIL):
             err_msg = str(e)

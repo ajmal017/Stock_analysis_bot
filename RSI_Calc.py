@@ -42,19 +42,19 @@ class RSI_Calc:
             #plt.show()
 
             # plot correspondingRSI values and significant levels
-            plt.figure(figsize=(15,5))
-            plt.title('RSI chart')
-            plt.plot(df['Date'], df['RSI'])
+            fig = plt.figure(figsize=(15,5))
+            fig.title('RSI chart')
+            fig.plot(df['Date'], df['RSI'])
 
-            plt.axhline(0, linestyle='--', alpha=0.1)
-            plt.axhline(20, linestyle='--', alpha=0.5)
-            plt.axhline(30, linestyle='--')
+            fig.axhline(0, linestyle='--', alpha=0.1)
+            fig.axhline(20, linestyle='--', alpha=0.5)
+            fig.axhline(30, linestyle='--')
 
-            plt.axhline(70, linestyle='--')
-            plt.axhline(80, linestyle='--', alpha=0.5)
-            plt.axhline(100, linestyle='--', alpha=0.1)
-            plt.savefig(config.GRAPH_FILE_NAME)
-            
+            fig.axhline(60, linestyle='--')
+            fig.axhline(40, linestyle='--', alpha=0.5)
+            fig.axhline(100, linestyle='--', alpha=0.1)
+            fig.savefig(config.GRAPH_FILE_NAME)
+            plt.close(fig)
             
         except Exception as e:
             print(e)
