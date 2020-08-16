@@ -3,8 +3,8 @@ RUN_BOT = True
 SEND_EMAIL = True
 UPDATE_STOCK_LIST=True
 
-send_to='4049921850@tmomail.net'
-send_to_log_email = 'nolanehs@gmail.com'
+send_to='email@gmail.com'
+send_to_log_email = 'email@gmail.com'
 
 #Standard Deviation Cutoff Periods
 MONTH_CUTTOFF = 5 #Amount of months of data to analyze
