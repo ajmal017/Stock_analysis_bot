@@ -18,7 +18,7 @@ class EmailResults:
     def SendResults(tic, d, RSI):
 
         if(RSI > config.HIGH_RSI_POINT):
-            emoji=config.fire
+            emoji=config.FIRE
         elif(RSI<config.LOW_RSI_POINT):
             emoji=config.ICE
         else:

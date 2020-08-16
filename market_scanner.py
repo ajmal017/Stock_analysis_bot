@@ -100,7 +100,6 @@ class mainObj:
                 print("SELL")
                 return False
             else:
-                print("Not the time")
                 return False
         else:
              return False

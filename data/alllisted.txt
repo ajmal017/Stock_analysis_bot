@@ -261,6 +261,7 @@ AZUL,AZUL|Azul S.A. American Depositary Shares (each representing three preferre
 F,F|Ford Motor Company Common Stock
 F$B,F$B|Ford Motor Company 6.20% Notes due June 1, 2059
 F$C,F$C|Ford Motor Company 6% Notes due December 1, 2059
+FAII.U,FAII.U|Fortress Value Acquisition Corp. II Units, each consisting of one share of Class A common stock and one-fifth of one Warrant
 FAM,FAM|First Trust/Aberdeen Global Opportunity Income Fund First Trust/Aberdeen Global Opportunity Income Fund Common Shares of Beneficial Interest
 FAN,FAN|First Trust Global Wind Energy ETF
 FAS,FAS|Direxion Financial Bull 3X Shares
@@ -356,7 +357,6 @@ FIYY,FIYY|Barclays ETN  FI Enhanced Global High Yield Exchange Traded Notes Seri
 FJNK,FJNK|Pacific Global Focused High Yield ETF
 FJUL,FJUL|FT Cboe Vest U.S. Equity Buffer ETF - July
 FJUN,FJUN|FT Cboe Vest U.S. Equity Buffer ETF - June
-FLAT,FLAT|iPath US Treasury Flattener ETN
 FLAU,FLAU|Franklin FTSE Australia ETF
 FLAX,FLAX|Franklin FTSE Asia ex Japan ETF
 FLBL,FLBL|Franklin Liberty Senior Loan ETF
@@ -490,7 +490,9 @@ FTV$A,FTV$A|Fortive Corporation 5.00% Mandatory Convertible Preferred Stock, Ser
 FUD,FUD|E-TRACS USB Bloomberg Commodity Index Exchange Traded Notes E-TRACS UBS Bloomberg CMCI Food ETN
 FUE,FUE|ELEMENTS Linked to the ICE BofAML Commodity Index eXtra Biofuels Total Return
 FUMB,FUMB|First Trust Ultra Short Duration Municipal ETF
+FUSE,FUSE|Fusion Acquisition Corp. Class A Common Stock
 FUSE.U,FUSE.U|Fusion Acquisition Corp. Units, each consisting of one share of Class A Common Stock and one-half of one redeemable Warrant
+FUSE.W,FUSE.W|Fusion Acquisition Corp. Warrants, each whole warrant exercisable for one share of Class A common stock at an exercise price of $11.50 per share
 FUT,FUT|ProShares Managed Futures Strategy ETF
 FUTY,FUTY|Fidelity MSCI Utilities Index ETF
 FVAC,FVAC|Fortress Value Acquisition Corp. Class A Common Stock
@@ -1121,6 +1123,7 @@ NTG,NTG|Tortoise Midstream Energy Fund, Inc. Common Stock
 NTIP,NTIP|Network-1 Technologies, Inc. Common Stock
 NTN,NTN|NTN Buzztime, Inc. Common Stock
 NTP,NTP|Nam Tai Property Inc. Common Stock
+NTST,NTST|NetSTREIT Corp. Common Stock
 NTSX,NTSX|WisdomTree 90/60 U.S. Balanced Fund
 NTZ,NTZ|Natuzzi, S.p.A.
 NUAG,NUAG|Nuveen Enhanced Yield U.S. Aggregate Bond ETF
@@ -1764,7 +1767,6 @@ STLV,STLV|iShares Factors US Value Style ETF
 STMB,STMB|iShares Factors US Mid Blend Style ETF
 STON,STON|StoneMor Inc. Common Stock
 STOT,STOT|SPDR DoubleLine Short Duration Total Return Tactical ETF
-STPP,STPP|iPath US Treasury Steepener ETN
 STPZ,STPZ|PIMCO 1-5 Year U.S. TIPS Index Exchange-Traded Fund
 STSB,STSB|iShares Factors US Small Blend Style ETF
 STT$D,STT$D|State Street Corporation Depositary Shares representing 1/4000th Perpetual Preferred Series D
@@ -2134,6 +2136,7 @@ ANPC,ANPC|AnPac Bio-Medical Science Co., Ltd. - American Depositary Shares
 ANTE,ANTE|AirNet Technology Inc. - American Depositary Shares, each representing ten ordinary shares
 ANY,ANY|Sphere 3D Corp. - Common Shares
 AOSL,AOSL|Alpha and Omega Semiconductor Limited - Common Shares
+AOUTV,AOUTV|American Outdoor Brands, Inc. - Common Stock
 APDN,APDN|Applied DNA Sciences, Inc. - Common Stock
 APEI,APEI|American Public Education, Inc. - Common Stock
 APEN,APEN|Apollo Endosurgery, Inc. - Common Stock
@@ -2301,6 +2304,7 @@ FLMN,FLMN|Falcon Minerals Corporation - Class A Common Stock
 FLMNW,FLMNW|Falcon Minerals Corporation - Warrant
 FLN,FLN|First Trust Latin America AlphaDEX Fund
 FLNT,FLNT|Fluent, Inc. - Common Stock
+FLUX,FLUX|Flux Power Holdings, Inc. - Common Stock
 FLXS,FLXS|Flexsteel Industries, Inc. - Common Stock
 FMAO,FMAO|Farmers & Merchants Bancorp, Inc. - Common Stock
 FMB,FMB|First Trust Managed Municipal ETF
@@ -2344,6 +2348,7 @@ FRPH,FRPH|FRP Holdings, Inc. - Common Stock
 FRSX,FRSX|Foresight Autonomous Holdings Ltd. - American Depositary Shares
 FRTA,FRTA|Forterra, Inc. - Common Stock
 FSBW,FSBW|FS Bancorp, Inc. - Common Stock
+FSDC,FSDC|FS Development Corp. - Class A Common Stock
 FSEA,FSEA|First Seacoast Bancorp - Common Stock
 FSFG,FSFG|First Savings Financial Group, Inc. - Common Stock
 FSRV,FSRV|FinServ Acquisition Corp. - Class A Common Stock
@@ -2521,6 +2526,7 @@ MAGS,MAGS|Magal Security Systems Ltd. - Ordinary Shares
 MARA,MARA|Marathon Patent Group, Inc. - Common Stock
 MARK,MARK|Remark Holdings, Inc. - Common Stock
 MARPS,MARPS|Marine Petroleum Trust - Units of Beneficial Interest
+MAXNV,MAXNV|Maxeon Solar Technologies, Ltd. - Ordinary Shares
 MAYS,MAYS|J. W. Mays, Inc. - Common Stock
 MBB,MBB|iShares MBS ETF
 MBCN,MBCN|Middlefield Banc Corp. - Common Stock
@@ -3078,6 +3084,7 @@ SPQQ,SPQQ|Siren Large Cap Blend Index ETF
 SPRO,SPRO|Spero Therapeutics, Inc. - Common Stock
 SPRT,SPRT|Support.com, Inc. - Common Stock
 SPWR,SPWR|SunPower Corporation - Common Stock
+SPWRV,SPWRV|SunPower Corporation - Common Stock Ex-Distribution When Issued
 SQBG,SQBG|Sequential Brands Group, Inc. - Common Stock
 SQLV,SQLV|Legg Mason Small-Cap Quality Value ETF
 SQQQ,SQQQ|ProShares UltraPro Short QQQ
@@ -3124,6 +3131,7 @@ SVBI,SVBI|Severn Bancorp Inc - Common Stock
 SVC,SVC|Service Properties Trust - Shares of Beneficial Interest
 SVRA,SVRA|Savara, Inc. - Common Stock
 SVVC,SVVC|Firsthand Technology Value Fund, Inc. - Common Stock
+SWBIV,SWBIV|Smith & Wesson Brands, Inc. - Common Stock Ex-Distribution When Issued
 SWKH,SWKH|SWK Holdings Corporation - Common Stock
 SXTC,SXTC|China SXT Pharmaceuticals, Inc. - Common Stock
 SY,SY|So-Young International Inc. - American Depository Shares
