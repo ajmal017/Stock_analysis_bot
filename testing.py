@@ -100,4 +100,3 @@ class Testing:
             print("Exception in log_stock_pick: "+ e)
 
 
-Testing.backTestYesterdaysResults()
