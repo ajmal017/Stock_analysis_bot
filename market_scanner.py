@@ -108,36 +108,42 @@ class mainObj:
 
 
     def parallel_wrapper(self,x, currentDate, positive_scans):
-        Stock_data = DataCollector.getStockData(x)
+        try:
+            Stock_data = DataCollector.getStockData(x)
         
-        df = self.getRSI(Stock_data)
-        if(not 'RSI' in df.columns):
-            return
+            df = self.getRSI(Stock_data)
+            if(not 'RSI' in df.columns):
+                return
 
-        df = EMA_Calc.computeEMA(df, "fast_EMA", config.fast_ema_days)
-        df = EMA_Calc.computeEMA(df, "slow_EMA", config.slow_ema_days)
-        entry_point = self.checkForEntryPoint(df)
+            df = EMA_Calc.computeEMA(df, "fast_EMA", config.fast_ema_days)
+            df = EMA_Calc.computeEMA(df, "slow_EMA", config.slow_ema_days)
+            entry_point = self.checkForEntryPoint(df)
         
-        if(not entry_point):
-            return
-        print(df)
-        RSI = df.iloc[-1]["RSI"]
-        print("\n"+ str(RSI))
+            #if(not entry_point):
+            #    return
+            print(df)
+            RSI = df.iloc[-1]["RSI"]
+            print("\n"+ str(RSI))
         
-        RSI_Calc.Price_Graph(df)
+            RSI_Calc.Price_Graph(df)
         
-        self.customPrint(df, x, RSI)
-        if(config.SEND_EMAIL):
-            EmailResults.SendResults(x, config.send_to, RSI)
-        #Allows you to keep all data for the end of the Bots run. Not doing anything with it yet
-        stonk = dict()
-        stonk['date'] = df.index[-1]
-        stonk['stock'] = x
-        stonk['Adj Close'] = df['Adj Close'].iloc[-1]
-        
-        Testing.append_list_as_row(stonk)
-        positive_scans.append(stonk)
+            self.customPrint(df, x, RSI)
+            if(config.SEND_EMAIL):
+                EmailResults.SendResults(x, config.send_to, RSI)
+            #Allows you to keep all data for the end of the Bots run. Not doing anything with it yet
+            stonk = dict()
+            stonk['date'] = df['Date'].iloc[-1] 
+            stonk['stock'] = x
+            stonk['Adj Close'] = df['Adj Close'].iloc[-1]
+            
+            print(stonk['date'])
+            Testing.log_stock_pick_CSV(stonk)
+            positive_scans.append(stonk)
 
+        except Exception as e:
+            print("Exception occurred in Parallel_wrapper: "+ e)
+        
+        
         
     def main_func(self):
 

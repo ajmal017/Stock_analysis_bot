@@ -24,38 +24,52 @@ class Testing:
         pass
    
     def backTestYesterdaysResults():
+        try:
+            i=0
+            score=0
+            stockCount=0
+            with open(config.STOCK_RESULTS) as csv_file:
+                csv_reader = csv.reader(csv_file, delimiter=',')
+                
+                for row in csv_reader:
+                    print("Here")
+                    if(len(row)>0 and i>=1):
+                        csv_date= datetime.datetime.strptime(row[0],'%Y-%m-%d %H:%M:%S')
+                        print("CSV DATE: " + str(csv_date))
+                        #check_date = csv_date + timedelta(days=1)
+                        in_date_range = ((datetime.datetime.today() - csv_date) <= timedelta(days=config.DAYS_OF_TEST))
+                        print(in_date_range)
+                    
+                        if(in_date_range):
+                            data = DataCollector.getStockData(row[1])
+                            
+                            print(data)
+                            loc = data.index.get_loc(csv_date)
+                            print(loc)
+                            print("Index Count: " + str(len(data.index)))
+                            if(loc == len(data.index)-1):
+                                print("No data to compare")
+                            else:
+                                print("LOC: " + str(loc))
+                                d = data.iloc[loc+1]
+                                todays_price = float(d["Adj Close"])
+                                print("Today's Price" + str(todays_price))
+                                stockCount+=1
+                                yesterday_price= float(row[2])
+                                print("Yesterday's Price" + str(yesterday_price))
+                                if(yesterday_price > todays_price): 
+                                    print("Bad Prediction")
+                                elif(todays_price >= yesterday_price):
+                                    print("I was correct")
+                                    score+=1
+                    i+=1
+            score=(score/stockCount)*100
+            print(score)
+            return score
         
-        i=0
-        score=0
-        stockCount=0
-        with open(config.STOCK_RESULTS) as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=',')
-            
-            for row in csv_reader:
-
-                if(len(row)>0 and i>=1):
-                    csv_date= datetime.datetime.strptime(row[0],'%Y-%m-%d %H:%M:%S')
-                    #check_date = csv_date + timedelta(days=1)
-                    in_date_range = ((datetime.datetime.today() - csv_date) <= timedelta(days=config.DAYS_OF_TEST))
-                    
-                    
-                    if(in_date_range):
-                        data = DataCollector.getStockData(row[1])
-                        print(data)
-                        loc = data.index.get_loc(csv_date)
-                        d = data.iloc[loc+1]
-                        todays_price = float(d["Adj Close"])
-                        stockCount+=1
-                        yesterday_price= float(row[2])
-                        if(yesterday_price > todays_price): 
-                            print("Bad Prediction")
-                        elif(todays_price > yesterday_price):
-                            print("I was correct")
-                            score+=1
-                i+=1
-        score=(score/stockCount)*100
-        print(score)
-        return score
+        except Exception as e:
+            print(e)
+      
                     
                 #line_count += 1
 
@@ -71,10 +85,10 @@ class Testing:
                 writer.writeheader()
                 for d in data:
                     writer.writerow(d)
-        except IOError:
-            print("I/O error")
+        except Exception as e:
+            print(e)
 
-    def append_list_as_row(data):
+    def log_stock_pick_CSV(data):        
         fields=['date','stock', 'Adj Close', ]
         fileName=config.STOCK_RESULTS
         try:
@@ -82,7 +96,8 @@ class Testing:
                 writer = csv.DictWriter(csvfile, fieldnames=fields)
 #                writer.writeheader()
                 writer.writerow(data)
-        except IOError:
-            print("I/O error")
+        except Exception as e:
+            print("Exception in log_stock_pick: "+ e)
 
 
+Testing.backTestYesterdaysResults()
