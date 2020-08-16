@@ -119,11 +119,11 @@ class mainObj:
             df = EMA_Calc.computeEMA(df, "slow_EMA", config.slow_ema_days)
             entry_point = self.checkForEntryPoint(df)
         
-            #if(not entry_point):
-            #    return
-            print(df)
+            if(not entry_point):
+                return
+            
             RSI = df.iloc[-1]["RSI"]
-            print("\n"+ str(RSI))
+            
         
             RSI_Calc.Price_Graph(df)
         
