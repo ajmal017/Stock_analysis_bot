@@ -6,6 +6,7 @@ from datetime import date, timedelta, datetime
 from dataCollector import DataCollector
 
 
+
 class EMA_Calc:
     
     def __init__(self):

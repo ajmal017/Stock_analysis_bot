@@ -117,6 +117,7 @@ class mainObj:
 
             df = EMA_Calc.computeEMA(df, "fast_EMA", config.fast_ema_days)
             df = EMA_Calc.computeEMA(df, "slow_EMA", config.slow_ema_days)
+            print(df)
             entry_point = self.checkForEntryPoint(df)
         
             if(not entry_point):
